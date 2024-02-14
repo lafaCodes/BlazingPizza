@@ -1,29 +1,39 @@
 @page "/"
+    @inject HttpClient HttpClient
+    @inject NavigationManager NavigationManager
+    @using BlazingPizza.Services
+    @inject OrderState OrderState
+    
+    
 
-@inject HttpClient HttpClient
-@inject NavigationManager NavigationManager
-
-<div class="main">
-  <h1>Blazing Pizzas</h1>
-  <ul class="pizza-cards">
-    @if (specials != null)
-    {
-      @foreach (var special in specials)
-      {
-        <li style="background-image: url('@special.ImageUrl')">
-          <div class="pizza-info">
+    <div class="main">
+      <h1>Blazing Pizzas</h1>
+      <ul class="pizza-cards">
+        @if (specials != null)
+        {
+          @foreach (var special in specials)
+          {
+            <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
+              <div class="pizza-info">
               <span class="title">@special.Name</span>
-                  @special.Description
-                <span class="price">@special.GetFormattedBasePrice()</span>
-          </div>
-        </li>
-      }
-    }
-  </ul>
-</div>
+              @special.Description
+              <span class="price">@special.GetFormattedBasePrice()</span>
+              </div>
+            </li>
+          }
+        }
+      </ul>
+    </div>
 
+    @if (OrderState.ShowingConfigureDialog)
+    {
+       <ConfigurePizzaDialog
+        Pizza="OrderState.ConfiguringPizza"
+        OnCancel="OrderState.CancelConfigurePizzaDialog"
+        OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
+    }
 @code {
-    List<PizzaSpecial> specials = new();
+    List<PizzaSpecial> specials = new List<PizzaSpecial>();
 
     protected override async Task OnInitializedAsync()
     {
