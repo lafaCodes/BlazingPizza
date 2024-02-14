@@ -4,7 +4,7 @@
     @using BlazingPizza.Services
     @inject OrderState OrderState
     
-    
+
 
     <div class="main">
       <h1>Blazing Pizzas</h1>
@@ -32,8 +32,43 @@
         OnCancel="OrderState.CancelConfigurePizzaDialog"
         OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
     }
+
+    @* Add sidebar to the page to display the Pizza added to the order *@
+    <div class="sidebar">
+        @if (order.Pizzas.Any())
+        {
+            <div class="order-contents">
+                <h2>Your order</h2>
+
+                @foreach (var configuredPizza in order.Pizzas)
+                {
+                  <div class="cart-item">
+                      <div class="title">@(configuredPizza.Size)" @configuredPizza.Special.Name</div>
+                      <div class="item-price">
+                          @configuredPizza.GetFormattedTotalPrice()
+                      </div>
+                      <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
+                  </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart">Choose a pizza<br>to get started</div>
+        }
+
+        <div class="order-total @(order.Pizzas.Any() ? "" : "hidden")">
+            Total:
+            <span class="total-price">@order.GetFormattedTotalPrice()</span>
+            <a href="checkout" class="@(OrderState.Order.Pizzas.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
+                Order >
+            </a>
+        </div>
+    </div>
 @code {
     List<PizzaSpecial> specials = new List<PizzaSpecial>();
+
+    Order order => OrderState.Order;
 
     protected override async Task OnInitializedAsync()
     {
