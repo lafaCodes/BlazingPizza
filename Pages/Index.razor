@@ -4,13 +4,19 @@
 @inject OrderState OrderState
 
 <div class="top-bar">
-    <a href="" class="logo">
-        <img src="img/logo.svg" alt="">
+    <a class="logo" href="">
+      <img src="img/logo.svg" />
     </a>
-    <a href="" class="nav-tab active">
-        <img src="img/pizza-slice.svg" alt="">
-        <div>Get Pizza</div>
-    </a>
+
+    <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
+      <img src="img/pizza-slice.svg" />
+      <div>Get Pizza</div>
+    </NavLink>
+
+    <NavLink href="myorders" class="nav-tab">
+      <img src="img/bike.svg" />
+      <div>My Orders</div>
+    </NavLink>
 </div>
 
 <div class="main">
@@ -20,11 +26,11 @@
     {
       @foreach (var special in specials)
       {
-          <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
+        <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
           <div class="pizza-info">
-          <span class="title">@special.Name</span>
-          @special.Description
-          <span class="price">@special.GetFormattedBasePrice()</span>
+            <span class="title">@special.Name</span>
+            @special.Description
+            <span class="price">@special.GetFormattedBasePrice()</span>
           </div>
         </li>
       }

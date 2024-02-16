@@ -4,12 +4,19 @@
 @inject NavigationManager NavigationManager
 
 <div class="top-bar">
-    <a href="" class="logo">
-        <img src="img/logo.svg" alt="">
+    <a class="logo" href="">
+        <img src="img/logo.svg" />
     </a>
-    <a href="" class="nav-tab">
-        <img src="img/pizza-slice.svg" alt="">
-    </a>
+
+    <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
+        <img src="img/pizza-slice.svg" />
+        <div>Get Pizza</div>
+    </NavLink>
+
+    <NavLink href="myorders" class="nav-tab">
+        <img src="img/bike.svg" />
+        <div>My Orders</div>
+    </NavLink>
 </div>
 
 <div class="main">
@@ -48,11 +55,11 @@
     {
         isSubmitting = true;
         //Post JSON to Pizza.db
-        var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.Order);
+        var response = await HttpClient.PostAsJsonAsync($"{NavigationManager.BaseUri}orders", OrderState.Order);
         var newOrderId = await response.Content.ReadFromJsonAsync<int>();
         //Reset order side bar
         OrderState.ResetOrder();
         //Navigate to the home page after order is placed
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/myorders");
     }
 }

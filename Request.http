@@ -1,0 +1,4 @@
+#Get 
+Get http://localhost:5000/orders/
+
+Get http://localhost:5000/myorders/
